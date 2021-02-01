@@ -5,7 +5,6 @@ import requests
 from bs4 import BeautifulSoup
 from src import UrlReader
 
-
 class PageReaderForCent(object):
     def __init__(self, url):  # read page from internet
         self.pattern = 0
@@ -16,9 +15,12 @@ class PageReaderForCent(object):
         }
         page = requests.get(url, headers)
         self.PageContent = BeautifulSoup(page.content, 'html.parser')
+
         delC = self.PageContent.find(id="tk-container-2020")  # a bunch of ****
         if delC:
             delC.decompose()
+
+
 
     def Validity(self):  # if it is out of date
         try:
@@ -26,15 +28,15 @@ class PageReaderForCent(object):
         except AttributeError as redirectErr:
             print(str(self.pageurl) + " occurs error")
             print(redirectErr)
-            return False
+            return '无效网址'
         else:
             # print(valid)
             if str(valid) == '全文有效':
                 # print('Yes')
-                return True
+                return '全文有效'
             else:
                 # print('No')
-                return False
+                return valid
 
     def GetTitle(self):
         pagetitle = self.PageContent.find(class_='dhgao title1').getText()
@@ -60,7 +62,7 @@ class PageReaderForCent(object):
         for index in Filter:
             tempstr += str(index.get_text()).replace('\r\n',
                                                      '<br>')  # .replace('<strong>', '').replace('</strong>', '')
-            tempstr.replace('\n', '<br>').replace('\n注释：\n\n', '')
+            tempstr.replace('\n', '<br>').replace('\n注释：\n\n', '').replace('网站纠错','')
         return tempstr
 
     def pattern_first(self):  # fontzoom -> p
@@ -87,16 +89,16 @@ class PageReaderForCent(object):
     # TODO:class="TextContentDuanLuo"
     # TODO:重构
     def GetDivContent(self):
-        # self.PageContent.findAll('h3').clear()
-        ContentStr = self.pattern_first()
-        if len(ContentStr) == 0:
-            ContentStr = self.pattern_third()
-            if len(ContentStr) == 0:
-                ContentStr = self.pattern_forth()
-        # print(ContentStr)
-        if len(ContentStr) == 0:
-            print(self.pageurl + " Empty Content?")
-            ContentStr = 'Empty!!!'
+        # ContentStr = self.pattern_first()
+        # if len(ContentStr) == 0:
+        #     ContentStr = self.pattern_third()
+        #     if len(ContentStr) == 0:
+        #         ContentStr = self.pattern_forth()
+        # if len(ContentStr) == 0:
+        #     print(self.pageurl + " Empty Content?")
+        #     ContentStr = 'Empty!!!'
+        ContentStr = self.pattern_first()+self.pattern_third()+self.pattern_forth()
+
         # print(ContentStr)
         return ContentStr
 
@@ -105,8 +107,10 @@ class PageReaderForCent(object):
         PDFlinks = self.PageContent.findAll('a', attrs={'href': re.compile('.*?.pdf')})
         DOClinks = self.PageContent.findAll('a', attrs={'href': re.compile('.*?.doc')})
         XLSlinks = self.PageContent.findAll('a', attrs={'href': re.compile('.*?.xls')})
+        RARlinks = self.PageContent.findAll('a', attrs={'href': re.compile('.*?.rar')})
         PDFlinks.extend(DOClinks)
         PDFlinks.extend(XLSlinks)  # merge
+        PDFlinks.extend(RARlinks)
         list(PDFlinks)
         LinkStr = ''
         if PDFlinks is not None:
@@ -121,7 +125,8 @@ class PageReaderForCent(object):
     # TODO:id,inset time,serial number,file name,file content,publish time,validity,attachment
     # Model
     def GetSingePage(self):
-        if self.Validity() == True:
+        vali=self.Validity()
+        if vali != '无效网址':
 
             ResSet = {
                 'SerialNum': self.GetSerialNum(),
@@ -130,7 +135,8 @@ class PageReaderForCent(object):
                 'Content': self.GetDivContent(),
                 'FileUrlSet': self.GetFile(),
                 'OriginalURL': self.pageurl,
-                'Location': 'Center'
+                'Location': 'Center',
+                'Valid':vali
             }
             # ResSet = [
             #     self.GetSerialNum(),
@@ -159,7 +165,7 @@ def GetAllinCent(filename='../data/textone.txt'):
         PR = PageReaderForCent(UrlLists[index])
         res = PR.GetSingePage()
         # print(res)
-        if res is not None and PR.Validity() == True:
+        if res is not None and PR.Validity() != '无效网址':
             ALLDATA.append(res)
             # ALLDATA_.append(pd.Series(res),ignore_index=True)
             # DataDict.update(res)
