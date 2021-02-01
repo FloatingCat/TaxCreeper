@@ -47,7 +47,7 @@ def ProcessLoc(loc,url,total):
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 '
                           'Safari/537.36 '
         }
-        page = requests.get(url, headers)
+        page = requests.get(tempurl, headers)
         PageContent = BeautifulSoup(page.content, 'html.parser')
         aContent = PageContent.find_all('a', target="_blank")
         for a in aContent:

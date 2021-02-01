@@ -20,7 +20,7 @@ class Thread_Center(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (CN_GetPage.GetAllinCent('../data/textone.txt'))
+        data = (CN_GetPage.GetAllinCent('../data/data_url.txt'))
         # small test
         # data.extend(data)
         threadLock.acquire()
