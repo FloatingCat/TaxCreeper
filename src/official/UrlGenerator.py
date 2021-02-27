@@ -9,7 +9,7 @@ def UGenerator(data=None, location='unname'):
         print('No data!')
         return False
     print('Generating')
-    with open('../data/' + location + '.txt', 'w') as DataFile:
+    with open('../../data/' + location + '.txt', 'w') as DataFile:
         for item in data:
             DataFile.write(item)
             DataFile.write('\n')
@@ -18,7 +18,7 @@ def UGenerator(data=None, location='unname'):
 def ProcessCN():  # 总局
     url = 'http://www.chinatax.gov.cn/api/query?siteCode=bm29000fgk&tab=all&key=9A9C42392D397C5CA6C1BF07E2E0AA6F'
     UList = []
-    with open('../data_url.txt', 'w') as DataFile:
+    with open('../../data_url.txt', 'w') as DataFile:
         for i in range(1, 406):
             data = requests.get(url,
                                 params={"timeOption": "2",

@@ -3,7 +3,8 @@ import re
 import time
 import requests
 from bs4 import BeautifulSoup
-from src import UrlReader
+from src.official import UrlReader
+
 
 class PageReaderForCent(object):
     def __init__(self, url):  # read page from internet

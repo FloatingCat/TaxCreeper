@@ -1,9 +1,8 @@
 # -*- coding : utf-8 -*-
 import re
-import time
 import requests
 from bs4 import BeautifulSoup
-from src import UrlReader
+from src.official import UrlReader
 
 
 class PageReaderForLoc(object):

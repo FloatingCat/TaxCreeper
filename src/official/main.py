@@ -1,6 +1,4 @@
-import time
-
-from src import DataModel, CN_GetPage, Loc_GetPage,UrlGenerator
+from src.official import DataModel, Loc_GetPage, CN_GetPage
 import threading
 
 # TODO:多线程优化
