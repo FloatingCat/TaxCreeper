@@ -1,7 +1,9 @@
-import time
+import re
+
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import DataModel
 
 
 class PageReaderForCent(object):
@@ -20,27 +22,37 @@ class PageReaderForCent(object):
         res = requests.get(url, headers=self.headers)
         self.soup = BeautifulSoup(res.content, 'html.parser')
 
+
     def getTopic(self):
         topics = []
-        scored_list = self.soup.find_all('xwt1')
+        scored_list = self.soup.find_all(class_='xwt1')
         # topic_list = self.soup.find_all('a', class_='topic')
         for t in scored_list:
             try:
                 link_title_span = t.find('div', class_='xwt1_a')  # 标题链接
-                link_title=link_title_span.find('a')
+                link_title = link_title_span.find('a')
                 # topic = t.find('a', class_='topic')
-                location_span = t.find('xwt1_d', class_='postdate')  # 地址
+                location_span = t.find(class_='xwt1_d')  # 地址
                 location = location_span.find('a').get_text()
-                post_date = location_span.find('p',class_='p3').get_text()
+                post_date = location_span.find('p', class_='p3').get_text()
                 # patternSP = re.compile('.*?相亲.*?')
                 # target_str = patternSP.match(topic)
+
+                link_arc = link_title['href']
+                res_arc = requests.get(link_arc, headers=self.headers)
+                arc_soup = BeautifulSoup(res_arc.content, 'html.parser')
+                arcContent = arc_soup.find(class_='arcContent')
+                arcContent_str = str(arcContent.get_text()).replace('\r\n', '<br>').replace('\n', '<br>')
                 dict_temp = {
                     'topic': link_title.get_text(),
                     'location': location,
-                    'link': 'https://bbs.nga.cn/' + link_title['href'],
-                    'postdate': post_date
+                    'link': link_arc,
+                    'postdate': post_date,
+                    'arcContent': arcContent_str,
+                    'Files':GetFile(arcContent)
                 }
                 topics.append(dict_temp)
+                # print(dict_temp)
             except AttributeError as e:
                 print(e)
                 continue
@@ -57,20 +69,40 @@ class PageReaderForCent(object):
         #         topics.append(dict_temp)#'https://bbs.nga.cn/' + t['href'] + "  " + t.get_text()
         return topics
 
+def GetFile(arcContent):
+    PDFlinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.pdf')})
+    DOClinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.doc')})
+    XLSlinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.xls')})
+    RARlinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.rar')})
+    PDFlinks.extend(DOClinks)
+    PDFlinks.extend(XLSlinks)  # merge
+    PDFlinks.extend(RARlinks)
+    list(PDFlinks)
+    LinkStr = ''
+    if PDFlinks is not None:
+        for index in range(0, len(PDFlinks)):
+            linkBuffer = str(PDFlinks[index].get('href'))
+            linkBuffer_ = 'https://www.shui5.cn' + linkBuffer + '\t<br>'
+            LinkStr += linkBuffer_
 
-def GetMultPages(url, number=1):
+    return LinkStr
+
+def GetMultPages(url, number1=1,number2=2):
     DataList = []
-    for i in range(1, number + 1):
-        print('Processing ' + str(i) + '/' + str(number))
+    for i in range(number1, number2 + 1):
+        print('Processing ' + str(i) + '/' + str(number2))
         url_one = url + str(i) + '.html'
+        print(url_one)
         Page_ = PageReaderForCent(url_one)
         DataList.extend(Page_.getTopic())
-    DataGenerator(DataList)
+    # DataGenerator(DataList)
+    return DataList
 
 
 def DataGenerator(data):
     dataset = pd.DataFrame(data)
-    dataset.to_excel('TestDataShui5.xlsx')
+    # dataset.to_excel('TestDataShui5.xlsx')
+    DataModel.IntoSqlite(dataset)
 
 
 if __name__ == '__main__':
