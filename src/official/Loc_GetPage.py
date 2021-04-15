@@ -2,7 +2,7 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from src.official import UrlReader
+from src.utils import UrlReader
 
 
 class PageReaderForLoc(object):

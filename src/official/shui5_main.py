@@ -1,4 +1,5 @@
-from src.official import DataModel, Generator_Shui5
+from src.official import Generator_Shui5
+from src.utils import DataModel
 import threading
 
 # TODO:多线程优化

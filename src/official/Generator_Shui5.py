@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import DataModel
+from src.utils import DataModel
 
 
 class PageReaderForCent(object):
@@ -21,6 +21,7 @@ class PageReaderForCent(object):
         self.pageurl = url
         res = requests.get(url, headers=self.headers)
         self.soup = BeautifulSoup(res.content, 'html.parser')
+        print('processing:',self.pageurl)
 
 
     def getTopic(self):
@@ -98,6 +99,11 @@ def GetMultPages(url, number1=1,number2=2):
     # DataGenerator(DataList)
     return DataList
 
+# def GetOnePage(url):
+#     print('processing '+url)
+#     print(url_one)
+#     Page_ = PageReaderForCent(url_one)
+#     return DataList
 
 def DataGenerator(data):
     dataset = pd.DataFrame(data)

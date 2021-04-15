@@ -1,6 +1,6 @@
 import pandas as pd
 import sqlite3
-
+# TODO:等待重构，将每一页的数据模型优化后的写入该模块（dict很占空间）
 def IntoSqlite(data):
     data_=pd.DataFrame(data)
     db = sqlite3.connect("../../data/testshui5.db")

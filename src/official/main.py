@@ -1,4 +1,5 @@
-from src.official import DataModel, Loc_GetPage, CN_GetPage
+from src.official import Loc_GetPage, CN_GetPage
+from src.utils import DataModel
 import threading
 
 # TODO:多线程优化
