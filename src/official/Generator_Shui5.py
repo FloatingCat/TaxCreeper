@@ -21,8 +21,7 @@ class PageReaderForCent(object):
         self.pageurl = url
         res = requests.get(url, headers=self.headers)
         self.soup = BeautifulSoup(res.content, 'html.parser')
-        print('processing:',self.pageurl)
-
+        print('processing:', self.pageurl)
 
     def getTopic(self):
         topics = []
@@ -50,7 +49,7 @@ class PageReaderForCent(object):
                     'link': link_arc,
                     'postdate': post_date,
                     'arcContent': arcContent_str,
-                    'Files':GetFile(arcContent)
+                    'Files': GetFile(arcContent)
                 }
                 topics.append(dict_temp)
                 # print(dict_temp)
@@ -70,6 +69,7 @@ class PageReaderForCent(object):
         #         topics.append(dict_temp)#'https://bbs.nga.cn/' + t['href'] + "  " + t.get_text()
         return topics
 
+
 def GetFile(arcContent):
     PDFlinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.pdf')})
     DOClinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.doc')})
@@ -88,7 +88,8 @@ def GetFile(arcContent):
 
     return LinkStr
 
-def GetMultPages(url, number1=1,number2=2):
+
+def GetMultPages(url, number1=1, number2=2):
     DataList = []
     for i in range(number1, number2 + 1):
         print('Processing ' + str(i) + '/' + str(number2))
@@ -98,6 +99,7 @@ def GetMultPages(url, number1=1,number2=2):
         DataList.extend(Page_.getTopic())
     # DataGenerator(DataList)
     return DataList
+
 
 # def GetOnePage(url):
 #     print('processing '+url)
