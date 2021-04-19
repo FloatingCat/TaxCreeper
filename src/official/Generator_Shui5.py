@@ -1,5 +1,8 @@
+import os
 import re
+import time
 
+import multiprocessing
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -7,6 +10,7 @@ from src.utils import DataModel
 
 
 class PageReaderForCent(object):
+
 
     def __init__(self, url):  # read page from internet
         self.headers = {
@@ -21,18 +25,30 @@ class PageReaderForCent(object):
         self.pageurl = url
         res = requests.get(url, headers=self.headers)
         self.soup = BeautifulSoup(res.content, 'html.parser')
-        print('processing:', self.pageurl)
+        # print('processing:', self.pageurl)
 
     def getTopic(self):
+        print('run in:',multiprocessing.current_process().name)
+
         topics = []
         scored_list = self.soup.find_all(class_='xwt1')
+        if not scored_list:
+            scored_list = self.soup.find_all(class_='xwt2')
+        # print('list:',scored_list)
         # topic_list = self.soup.find_all('a', class_='topic')
         for t in scored_list:
+            time_start = time.time()
             try:
                 link_title_span = t.find('div', class_='xwt1_a')  # 标题链接
+                #print(link_title_span)
+                if not link_title_span:
+                    link_title_span = t.find('div', class_='xwt2_a')  # 标题链接
                 link_title = link_title_span.find('a')
                 # topic = t.find('a', class_='topic')
                 location_span = t.find(class_='xwt1_d')  # 地址
+                #print(location_span)
+                if not location_span:
+                    location_span = t.find(class_='xwt2_d')  # 地址
                 location = location_span.find('a').get_text()
                 post_date = location_span.find('p', class_='p3').get_text()
                 # patternSP = re.compile('.*?相亲.*?')
@@ -51,8 +67,12 @@ class PageReaderForCent(object):
                     'arcContent': arcContent_str,
                     'Files': GetFile(arcContent)
                 }
+                # print(dict_temp['topic'])
+                # print(topics)
                 topics.append(dict_temp)
                 # print(dict_temp)
+                time_end = time.time()
+                # print('totally cost', time_end - time_start)
             except AttributeError as e:
                 print(e)
                 continue
@@ -67,6 +87,9 @@ class PageReaderForCent(object):
         #             'link':'https://bbs.nga.cn/' +t['href']
         #         }
         #         topics.append(dict_temp)#'https://bbs.nga.cn/' + t['href'] + "  " + t.get_text()
+        print('topic_len',len(topics),'in ',self.pageurl)
+
+
         return topics
 
 
