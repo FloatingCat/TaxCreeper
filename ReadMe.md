@@ -1,6 +1,10 @@
 # TaxCreeper
 ## Core
-Generator_Distributed.py
+1. 核心程序（客户机）：  
+[Generator_Distributed.py](https://github.com/FloatingCat/TaxCreeper/blob/main/Generator_Distributed.py)
+2. 分布式支持组件：  
+生成爬虫队列到云端[URL_Pusher_Redis.py](https://github.com/FloatingCat/TaxCreeper/blob/main/URL_Pusher_Redis.py)  
+爬取数据持久化到本地sqlite[Res_Redis_to_SQL.py](https://github.com/FloatingCat/TaxCreeper/blob/main/Res_Redis_to_SQL.py)  
 ## Structure
 ![Structure](https://raw.githubusercontent.com/FloatingCat/TaxCreeper/main/Structure.jpg)
 ## TODO:
