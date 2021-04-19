@@ -1,4 +1,5 @@
 import json
+
 from time import sleep
 
 import redis
@@ -21,7 +22,7 @@ max_alloc = 4
 min_alloc = 2
 # manager = multiprocessing.Manager()
 # url_que = multiprocessing.Queue()
-url_L = []
+
 
 
 def url_put():
@@ -33,7 +34,7 @@ def url_put():
     #         return 'stop'
     temp = r.spop(name='waiting_url', count=core_amount * max_alloc)
     print('temp:', temp)
-    url_L.extend(temp)
+    return temp
 
 
 def multi_pages(url_one):
@@ -42,9 +43,11 @@ def multi_pages(url_one):
     res_page = Page_.getTopic()
     if not res_page:
         return
+    pipe=r.pipeline()
     for item in res_page:
         temp = json.dumps(item)
-        r.sadd('res_dfs',temp)
+        pipe.sadd('res_dfs',temp)
+    pipe.execute()
     # print(len(res_page), res_page)
     # res_bytes = pickle.dumps(res_page) # List 压成 pickle
     # print(res_bytes)
@@ -58,6 +61,7 @@ def multi_creeper():
     TP = multiprocessing.Pool(core_amount)
     # while url_que.qsize()!=0:
     #     url_waiting.append(url_que.get())
+    url_L=url_put()
     print(url_L)
     TP.map(multi_pages, url_L)
     # while not url_que.empty():
@@ -81,6 +85,7 @@ def multi_creeper():
 
 if __name__ == '__main__':
     while True:
+
         url_put()
         multi_creeper()
         print('new round')
