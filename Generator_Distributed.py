@@ -16,7 +16,7 @@ res_list = []
 pool = redis.ConnectionPool(host=redis_config['host'], port=redis_config['port'],
                             decode_responses=redis_config['decode_responses'], password=redis_config['password'])
 r = redis.Redis(connection_pool=pool)
-core_amount = 8
+core_amount = 32
 max_alloc = 4
 min_alloc = 2
 # manager = multiprocessing.Manager()
@@ -76,13 +76,15 @@ def multi_creeper():
     # # DataModel.IntoSqlite(pd.DataFrame(res_list))
     # df_bytes=pickle.dumps(pd.DataFrame(res_list))
     # r.sadd('res_dfs',df_bytes)
+    TP.close()
 
 
 if __name__ == '__main__':
-    # while True:
-    #     url_put()
-    #     multi_creeper()
-    #     sleep(0.5)
-    url_put()
-    multi_creeper()
-    sleep(0.5)
+    while True:
+        url_put()
+        multi_creeper()
+        print('new round')
+        sleep(0.5)
+    # url_put()
+    # multi_creeper()
+    # sleep(0.5)
