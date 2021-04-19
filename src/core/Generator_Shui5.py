@@ -1,4 +1,3 @@
-import os
 import re
 import time
 
@@ -6,7 +5,7 @@ import multiprocessing
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-from src.utils import DataModel
+from src.Model import DataModel
 
 
 class PageReaderForCent(object):

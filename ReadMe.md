@@ -1,4 +1,6 @@
 # TaxCreeper
+## Core
+Generator_Distributed.py
 ## Structure
 ![Structure](https://raw.githubusercontent.com/FloatingCat/TaxCreeper/main/Structure.jpg)
 ## TODO:

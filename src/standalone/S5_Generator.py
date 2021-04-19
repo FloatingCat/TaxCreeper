@@ -1,5 +1,7 @@
-from src.official import Generator_Shui5
-from src.utils import DataModel
+from time import sleep
+
+from src.core import Generator_Shui5
+from src.Model import DataModel
 import multiprocessing
 import pandas as pd
 
@@ -29,5 +31,7 @@ def multi_creeper():
 
 
 if __name__ == '__main__':
-    url_put()
-    multi_creeper()
+    while True:
+        url_put()
+        multi_creeper()
+        sleep(2)
