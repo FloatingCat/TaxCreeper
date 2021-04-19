@@ -6,6 +6,6 @@ Generator_Distributed.py
 ## TODO:
 - 进一步封装
 - web端查询开发
-- 检索优化
-- 分布式
+    - 检索优化
+- 分布式中的断点续传问题
 
