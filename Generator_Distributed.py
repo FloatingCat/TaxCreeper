@@ -17,7 +17,7 @@ res_list = []
 pool = redis.ConnectionPool(host=redis_config['host'], port=redis_config['port'],
                             decode_responses=redis_config['decode_responses'], password=redis_config['password'])
 r = redis.Redis(connection_pool=pool)
-core_amount = 32
+core_amount = 16
 max_alloc = 4
 min_alloc = 2
 # manager = multiprocessing.Manager()
@@ -48,6 +48,8 @@ def multi_pages(url_one):
         temp = json.dumps(item)
         pipe.sadd('res_dfs',temp)
     pipe.execute()
+    print(r.scard('res_dfs'))
+
     # print(len(res_page), res_page)
     # res_bytes = pickle.dumps(res_page) # List 压成 pickle
     # print(res_bytes)
@@ -62,7 +64,7 @@ def multi_creeper():
     # while url_que.qsize()!=0:
     #     url_waiting.append(url_que.get())
     url_L=url_put()
-    print(url_L)
+    print('urls:',url_L)
     TP.map(multi_pages, url_L)
     # while not url_que.empty():
     #     if url_que.qsize() <= core_amount * min_alloc and res_stat != 'stop':
@@ -86,7 +88,7 @@ def multi_creeper():
 if __name__ == '__main__':
     while True:
 
-        url_put()
+        # url_put()
         multi_creeper()
         print('new round')
         sleep(0.5)
