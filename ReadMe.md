@@ -10,7 +10,7 @@
 意外情况检测：  
 [Sync_Queue](https://github.com/FloatingCat/TaxCreeper/blob/main/Sync_Queue.py)
 ## Structure
-![Structure](https://raw.githubusercontent.com/FloatingCat/TaxCreeper/main/Doc/Structure.jpg)
+![Structure](https://raw.githubusercontent.com/FloatingCat/TaxCreeper/main/Doc/Structure_2.jpg)
 ## TODO:
 - 进一步封装
 - web端查询开发
