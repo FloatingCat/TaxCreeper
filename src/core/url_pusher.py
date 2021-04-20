@@ -13,6 +13,7 @@ def url_put(index_1=30,index_2=30):
     for i in range(1, index_2):#962
         pipe.sadd('waiting_url','https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_' + str(i)+'.html')
     pipe.execute()
+    r.sunionstore('val_url','waiting_url')
     print(r.scard('waiting_url'))
     r.close()
 if __name__=='__main__':

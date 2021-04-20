@@ -9,20 +9,13 @@ from src.config import redis_config
 from src.core import Generator_Shui5
 import multiprocessing
 
-# url_que = multiprocessing.Queue()
-
 res_list = []
-# pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
-# pool = redis.ConnectionPool(host='39.97.175.209', port=6379, decode_responses=True,password='x74rtw05')
 pool = redis.ConnectionPool(host=redis_config['host'], port=redis_config['port'],
                             decode_responses=redis_config['decode_responses'], password=redis_config['password'])
 r = redis.Redis(connection_pool=pool)
-core_amount = 16
+core_amount = multiprocessing.cpu_count()
 max_alloc = 4
 min_alloc = 2
-# manager = multiprocessing.Manager()
-# url_que = multiprocessing.Queue()
-
 
 
 def url_put():
@@ -43,51 +36,23 @@ def multi_pages(url_one):
     res_page = Page_.getTopic()
     if not res_page:
         return
-    pipe=r.pipeline()
-    for item in res_page:
-        temp = json.dumps(item)
-        pipe.sadd('res_dfs',temp)
-    pipe.execute()
-    print(r.scard('res_dfs'))
+    res_page_ = json.dumps(res_page)  # 保证原子性和一一对应
+    print(type(res_page_), len(res_page_))
 
-    # print(len(res_page), res_page)
-    # res_bytes = pickle.dumps(res_page) # List 压成 pickle
-    # print(res_bytes)
-    # r.sadd('res_dfs', res_bytes)
-    # res_list.extend(Page_.getTopic())
+    r.hset(name='res_url_set', key=url_one, value=res_page_)
+    r.srem('val_url', url_one)  # 删除验证集合
 
 
 def multi_creeper():
-    res_stat = None
-    # url_waiting=[]
     TP = multiprocessing.Pool(core_amount)
-    # while url_que.qsize()!=0:
-    #     url_waiting.append(url_que.get())
-    url_L=url_put()
-    print('urls:',url_L)
+    url_L = url_put()
+    print('urls:', url_L)
     TP.map(multi_pages, url_L)
-    # while not url_que.empty():
-    #     if url_que.qsize() <= core_amount * min_alloc and res_stat != 'stop':
-    #         print('que_size:', url_que.qsize())
-    #         res_stat = url_put(url_que)
-    #
-    #     now_url = url_que.get()
-    #     print('now:', now_url)
-    #     TP.apply_async(func=multi_pages(now_url))
-    #     # if res_stat == 'stop':
-    #     #     print('stop at',url_que.qsize())
-    #     #     break
-    # TP.close()
-    # TP.join()
-    # # DataModel.IntoSqlite(pd.DataFrame(res_list))
-    # df_bytes=pickle.dumps(pd.DataFrame(res_list))
-    # r.sadd('res_dfs',df_bytes)
     TP.close()
 
 
 if __name__ == '__main__':
     while True:
-
         # url_put()
         multi_creeper()
         print('new round')
