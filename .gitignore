@@ -124,3 +124,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 data/testshui5.db
+.idea/TaxCreeper.iml
+.idea/misc.xml
