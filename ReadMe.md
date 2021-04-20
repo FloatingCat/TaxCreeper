@@ -7,8 +7,10 @@
 [URL_Pusher_Redis.py](https://github.com/FloatingCat/TaxCreeper/blob/main/URL_Pusher_Redis.py)  
 爬取数据持久化到本地sqlite：  
 [Res_Redis_to_SQL.py](https://github.com/FloatingCat/TaxCreeper/blob/main/Res_Redis_to_SQL.py)  
+意外情况检测：  
+[Sync_Queue](https://github.com/FloatingCat/TaxCreeper/blob/main/Sync_Queue.py)
 ## Structure
-![Structure](https://raw.githubusercontent.com/FloatingCat/TaxCreeper/main/Structure.jpg)
+![Structure](https://raw.githubusercontent.com/FloatingCat/TaxCreeper/main/Doc/Structure.jpg)
 ## TODO:
 - 进一步封装
 - web端查询开发
