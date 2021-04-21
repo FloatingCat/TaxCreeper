@@ -8,7 +8,7 @@
 爬取数据持久化到本地sqlite：  
 [Res_Redis_to_SQL.py](https://github.com/FloatingCat/TaxCreeper/blob/main/Res_Redis_to_SQL.py)  
 意外情况检测（爬取队列和检测结果集）：  
-[Sync_Queue](https://github.com/FloatingCat/TaxCreeper/blob/main/Sync_Queue.py)
+[Sync_Queue.py](https://github.com/FloatingCat/TaxCreeper/blob/main/Sync_Queue.py)
 ## Structure
 ![Structure](https://raw.githubusercontent.com/FloatingCat/TaxCreeper/main/Doc/Structure_2.jpg)
 ## TODO:
