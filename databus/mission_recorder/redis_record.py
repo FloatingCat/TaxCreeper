@@ -1,13 +1,7 @@
-import redis
-from uuid import uuid4
+from databus.mission_recorder.redis_client import get_redis_conn
+
+redis_cli = get_redis_conn()
 
 
-def init_mission(redis_cli: redis.client.Redis, page_url):
-    """
-
-    :param redis_cli: 客户端实例
-    :param page_url: key为url
-    :return:
-    """
-    unique_id = uuid4().hex
-    return redis_cli.hset("missions_undo", page_url, unique_id)
+def set_mission_status(page_url: str, status: str):
+    return redis_cli.hset("missions", page_url, status)
