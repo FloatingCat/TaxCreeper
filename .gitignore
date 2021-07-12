@@ -126,3 +126,5 @@ dmypy.json
 data/testshui5.db
 .idea/TaxCreeper.iml
 .idea/misc.xml
+
+./.idea
