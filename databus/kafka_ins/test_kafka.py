@@ -1,8 +1,3 @@
-import json
-import traceback
-
-from kafka import KafkaProducer
-from kafka.errors import kafka_errors
 from databus.kafka_ins.producer import KafkaProducerIns
 
 
