@@ -1,4 +1,5 @@
-from src.official import Loc_GetPage, CN_GetPage
+import CN_GetPage
+import Loc_GetPage
 from src.Model import DataModel
 import threading
 

@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+
 def pagetest(url):
     pageurl = url
     headers = {
@@ -11,10 +12,11 @@ def pagetest(url):
     page = requests.get(url, headers)
     PageContent = BeautifulSoup(page.content, 'html.parser')
     print(PageContent)
-    temp=PageContent.find(text=re.compile('.*?\\d\\d\\d\\d-\\d\\d-\\d\\d.*?'))
+    temp = PageContent.find(text=re.compile('.*?\\d\\d\\d\\d-\\d\\d-\\d\\d.*?'))
 
     print(temp)
     # timestamp = temp.find()
+
 
 if __name__ == '__main__':
     pagetest('https://sichuan.chinatax.gov.cn/art/2020/3/16/art_8803_8486.html')

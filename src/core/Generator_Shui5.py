@@ -6,28 +6,24 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from src.Model import DataModel
+import threading
+from greenlet import greenlet
 
 
 class PageReaderForCent(object):
-
 
     def __init__(self, url):  # read page from internet
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
             'Connection': 'keep-alive'
         }
-        # self.cookies = 'UM_distinctid=16df733f26b3a8-0c6ae27b1fe39-3d375b01-1fa400-16df733f26c79f; taihe_bi_sdk_uid=cbd969cd52f5f62a6f7fe5069f57cc6c; ngaPassportUid=34337474; ngaPassportUrlencodedUname=%25BD%25D0%25C9%25A7%25B5%25C4%25C3%25A8; ngaPassportCid=Z8eu0qnv7911if6jl6d1alu112qt5v944g00oii6; ngacn0comUserInfo=%25BD%25D0%25C9%25A7%25B5%25C4%25C3%25A8%09%25E5%258F%25AB%25E9%25AA%259A%25E7%259A%2584%25E7%258C%25AB%0942%0942%09%09-10%0922902%094%090%090%0911_-300%2C22_30%2C61_16%2C39_30%2C85_15; CNZZDATA30043604=cnzz_eid%3D1054280295-1571806389-https%253A%252F%252Fwww.google.com%252F%26ntime%3D1574749354; taihe_bi_sdk_session=3f434363b5d97f0bbe5fb22ee06a1e25; ngacn0comUserInfoCheck=6bef3a1628f60ed226b2d9e40cf7b34a; ngacn0comInfoCheckTime=1574750138; lastvisit=1574750762; lastpath=/read.php?tid=19416263&_ff=436; bbsmisccookies=%7B%22uisetting%22%3A%7B0%3A1%2C1%3A1582092365%7D%2C%22pv_count_for_insad%22%3A%7B0%3A-160%2C1%3A1574787652%7D%2C%22insad_views%22%3A%7B0%3A2%2C1%3A1574787652%7D%7D; _cnzz_CV30043604=forum%7Cfid436%7C0'
-        # self.cookie = {}
-        # for line in self.cookies.split(';'):
-        #     name, value = line.strip().split('=', 1)
-        #     self.cookie[name] = value
-        self.pageurl = url
+        self.page_url = url
         res = requests.get(url, headers=self.headers)
         self.soup = BeautifulSoup(res.content, 'html.parser')
         # print('processing:', self.pageurl)
 
     def getTopic(self):
-        print('run in:',multiprocessing.current_process().name)
+        print('run in:', multiprocessing.current_process().name)
 
         topics = []
         scored_list = self.soup.find_all(class_='xwt1')
@@ -39,32 +35,33 @@ class PageReaderForCent(object):
             time_start = time.time()
             try:
                 link_title_span = t.find('div', class_='xwt1_a')  # 标题链接
-                #print(link_title_span)
+                # print(link_title_span)
                 if not link_title_span:
                     link_title_span = t.find('div', class_='xwt2_a')  # 标题链接
+                assert link_title_span
                 link_title = link_title_span.find('a')
+                assert link_title
                 # topic = t.find('a', class_='topic')
                 location_span = t.find(class_='xwt1_d')  # 地址
-                #print(location_span)
+                # print(location_span)
                 if not location_span:
                     location_span = t.find(class_='xwt2_d')  # 地址
                 location = location_span.find('a').get_text()
                 post_date = location_span.find('p', class_='p3').get_text()
-                # patternSP = re.compile('.*?相亲.*?')
-                # target_str = patternSP.match(topic)
-
                 link_arc = link_title['href']
+
+                print("link target: ", link_arc)
                 res_arc = requests.get(link_arc, headers=self.headers)
                 arc_soup = BeautifulSoup(res_arc.content, 'html.parser')
-                arcContent = arc_soup.find(class_='arcContent')
-                arcContent_str = str(arcContent.get_text()).replace('\r\n', '<br>').replace('\n', '<br>')
+                arc_content = arc_soup.find(class_='arcContent')
+                arc_content_str = str(arc_content.get_text()).replace('\r\n', '<br>').replace('\n', '<br>')
                 dict_temp = {
                     'topic': link_title.get_text(),
                     'location': location,
                     'link': link_arc,
                     'postdate': post_date,
-                    'arcContent': arcContent_str,
-                    'Files': GetFile(arcContent)
+                    'arc_content': arc_content_str,
+                    'Files': GetFile(arc_content)
                 }
                 # print(dict_temp['topic'])
                 # print(topics)
@@ -86,41 +83,49 @@ class PageReaderForCent(object):
         #             'link':'https://bbs.nga.cn/' +t['href']
         #         }
         #         topics.append(dict_temp)#'https://bbs.nga.cn/' + t['href'] + "  " + t.get_text()
-        print('topic_len',len(topics),'in ',self.pageurl)
-
+        print('topic_len', len(topics), 'in ', self.page_url)
 
         return topics
 
 
-def GetFile(arcContent):
-    PDFlinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.pdf')})
-    DOClinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.doc')})
-    XLSlinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.xls')})
-    RARlinks = arcContent.findAll('a', attrs={'href': re.compile('.*?.rar')})
-    PDFlinks.extend(DOClinks)
-    PDFlinks.extend(XLSlinks)  # merge
-    PDFlinks.extend(RARlinks)
-    list(PDFlinks)
+def GetFile(arc_content):
+    pdf_links = arc_content.findAll('a', attrs={'href': re.compile('.*?.pdf')})
+    doc_links = arc_content.findAll('a', attrs={'href': re.compile('.*?.doc')})
+    xls_links = arc_content.findAll('a', attrs={'href': re.compile('.*?.xls')})
+    rar_links = arc_content.findAll('a', attrs={'href': re.compile('.*?.rar')})
+    pdf_links.extend(doc_links)
+    pdf_links.extend(xls_links)  # merge
+    pdf_links.extend(rar_links)
+    list(pdf_links)
     LinkStr = ''
-    if PDFlinks is not None:
-        for index in range(0, len(PDFlinks)):
-            linkBuffer = str(PDFlinks[index].get('href'))
+    if pdf_links is not None:
+        for index in range(0, len(pdf_links)):
+            linkBuffer = str(pdf_links[index].get('href'))
             linkBuffer_ = 'https://www.shui5.cn' + linkBuffer + '\t<br>'
             LinkStr += linkBuffer_
 
     return LinkStr
 
 
-def GetMultPages(url, number1=1, number2=2):
-    DataList = []
+def GetMultiPages(url, number1=1, number2=2):
+    def page_run():
+        resp = page_instance.getTopic()
+        data_list.extend(resp)
+
+    data_list = []
     for i in range(number1, number2 + 1):
         print('Processing ' + str(i) + '/' + str(number2))
         url_one = url + str(i) + '.html'
         print(url_one)
-        Page_ = PageReaderForCent(url_one)
-        DataList.extend(Page_.getTopic())
-    # DataGenerator(DataList)
-    return DataList
+        page_instance = PageReaderForCent(url_one)
+        gt = greenlet(page_run())
+        gt_res = gt
+        # print(gt_res)
+        # assert type(gt_res) == list`
+        # data_list.extend(gt_res)
+    # DataGenerator(data_list)
+    print(data_list)
+    return data_list
 
 
 # def GetOnePage(url):
@@ -136,4 +141,4 @@ def DataGenerator(data):
 
 
 if __name__ == '__main__':
-    GetMultPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 5)
+    GetMultiPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 1, 5)

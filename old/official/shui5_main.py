@@ -19,7 +19,7 @@ class Thread_Center1(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 500, 604))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 500, 604))
         # small test
         # data.extend(data)
         threadLock.acquire()
@@ -39,7 +39,7 @@ class Thread_Center2(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 400, 499))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 400, 499))
         # small test
         # data.extend(data)
         threadLock.acquire()
@@ -59,7 +59,7 @@ class Thread_Center3(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 300, 399))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 300, 399))
         # small test
         # data.extend(data)
         threadLock.acquire()
@@ -79,7 +79,7 @@ class Thread_Center4(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 200, 299))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 200, 299))
         # small test
         # data.extend(data)
         threadLock.acquire()
@@ -99,7 +99,7 @@ class Thread_Center5(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 100, 199))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 100, 199))
         # small test
         # data.extend(data)
         threadLock.acquire()
@@ -119,7 +119,7 @@ class Thread_Center6(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 1, 99))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/NianDuCaiShuiFaGui/108_', 1, 99))
         # small test
         # data.extend(data)
         threadLock.acquire()
@@ -139,7 +139,7 @@ class Thread_Loc1(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 700, 962))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 700, 962))
         # small test
         # data.extend(data)
         threadLock.acquire()  # lock
@@ -160,7 +160,7 @@ class Thread_Loc2(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 500, 699))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 500, 699))
         # small test
         # data.extend(data)
         threadLock.acquire()  # lock
@@ -181,7 +181,7 @@ class Thread_Loc3(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 300, 499))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 300, 499))
         # small test
         # data.extend(data)
         threadLock.acquire()  # lock
@@ -202,7 +202,7 @@ class Thread_Loc4(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 100, 299))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 100, 299))
         # small test
         # data.extend(data)
         threadLock.acquire()  # lock
@@ -223,7 +223,7 @@ class Thread_Loc5(threading.Thread):
     def run(self):
         print("开始线程：" + self.name)
         # print_time(self.name, self.counter, 5)
-        data = (Generator_Shui5.GetMultPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 1, 99))
+        data = (Generator_Shui5.GetMultiPages('https://www.shui5.cn/article/DiFangCaiShuiFaGui/145_', 1, 99))
         # small test
         # data.extend(data)
         threadLock.acquire()  # lock
