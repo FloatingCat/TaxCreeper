@@ -2,11 +2,9 @@ import json
 import pickle
 import sqlite3
 import time
-import redis
 import pandas as pd
 
-from src.Model.Redis_connecter import RedisConn
-from src.controller.config import redis_config
+from old.src.Model.Redis_connecter import RedisConn
 
 
 def picklify(df):

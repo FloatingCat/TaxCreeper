@@ -1,6 +1,6 @@
 import redis
 
-from src.controller.config import redis_config
+from old.src.controller.config import redis_config
 
 
 class RedisConn:

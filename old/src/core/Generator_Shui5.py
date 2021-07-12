@@ -5,8 +5,7 @@ import multiprocessing
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-from src.Model import DataModel
-import threading
+from old.src.Model import DataModel
 from greenlet import greenlet
 
 

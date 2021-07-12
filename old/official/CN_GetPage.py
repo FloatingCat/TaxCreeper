@@ -3,7 +3,7 @@ import re
 import time
 import requests
 from bs4 import BeautifulSoup
-from src.utils import UrlReader
+from old.src.utils import UrlReader
 
 
 class PageReaderForCent(object):

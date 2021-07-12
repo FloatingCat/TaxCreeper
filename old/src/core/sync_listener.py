@@ -1,7 +1,5 @@
 # 检测到Redis爬取队列空且Redis校验队列不为空时将校验队列拷贝至爬取队列
-import redis
-from src.Model.Redis_connecter import RedisConn
-from src.controller.config import redis_config
+from old.src.Model.Redis_connecter import RedisConn
 
 
 def sync_listener():

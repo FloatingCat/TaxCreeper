@@ -1,6 +1,5 @@
 import json
 from time import sleep
-import redis
 
 from src.Model.Redis_connecter import RedisConn
 from src.controller.config import processing_config

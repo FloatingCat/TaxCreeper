@@ -1,7 +1,4 @@
-import redis
-
-from src.Model.Redis_connecter import RedisConn
-from src.controller.config import redis_config
+from old.src.Model.Redis_connecter import RedisConn
 
 
 def url_put(index_1=30, index_2=30):

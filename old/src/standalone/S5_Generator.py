@@ -1,7 +1,7 @@
 from time import sleep
 
-from src.core import Generator_Shui5
-from src.Model import DataModel
+from old.src.core import Generator_Shui5
+from old.src.Model import DataModel
 import multiprocessing
 import pandas as pd
 
