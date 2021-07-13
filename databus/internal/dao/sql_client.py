@@ -9,7 +9,7 @@ from hashlib import md5
 # 创建对象的基类:
 Base = declarative_base()
 # 初始化数据库连接:
-engine = create_engine('mysql+mysqlconnector://root:x74rtw05@localhost:3306/mission_record')
+engine = create_engine('mysql+pymysql://root:x74rtw05@localhost:3306/tax_crawler')
 # 创建DBSession类型:
 DBSession = sessionmaker(bind=engine)
 
@@ -32,12 +32,15 @@ def get_session():
 
 def create_record_sql(page_url: str):
     with get_session() as ds:
-        mr = MissionRecord(uniqueID=md5((page_url +
-                                         str(datetime.datetime.now().strftime("_%Y%m%d_%H%M%S_%f"))).encode("utf-8"))
-                           , mission_status="pre")
+        mr = MissionRecord(uniqueID=(md5(page_url.encode("utf-8")).hexdigest()) + str(
+            datetime.datetime.now().strftime("_%Y%m%d_%H%M%S_%f"))
+                           , page_url=page_url, mission_status="pre")
         ds.add(mr)
         ds.commit()
-        return
+
+
+def update_record_sql(uniqueID):
+    pass
 
 
 if __name__ == "__main__":
