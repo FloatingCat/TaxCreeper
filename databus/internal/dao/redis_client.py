@@ -1,10 +1,11 @@
 import redis
-from databus.configs import redis_config
-from databus.singleton.singleton import Singleton
+from databus.internal.configs import redis_config
+from databus.internal.utils.singleton.singleton import Singleton
 
 
 def get_redis_conn():
     return RedisConn().r
+
 
 @Singleton
 class RedisConn:
@@ -13,4 +14,3 @@ class RedisConn:
                                          decode_responses=redis_config['decode_responses'],
                                          )
         self.r = redis.Redis(connection_pool=self.pool)
-

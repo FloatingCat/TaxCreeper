@@ -1,9 +1,9 @@
 import json
 import traceback
-from kafka import KafkaProducer, KafkaConsumer
+from kafka import KafkaProducer
 from kafka.errors import kafka_errors
-from typing import Optional, List
-from databus.singleton.singleton import Singleton
+from typing import Optional
+from databus.internal.utils.singleton.singleton import Singleton
 
 
 @Singleton
@@ -29,3 +29,8 @@ class KafkaProducerIns:
         except kafka_errors:  # 发送失败抛出kafka_errors
             traceback.format_exc()
             return False
+
+
+def get_producer_ins(_bootstrap_servers: None):
+    ins = KafkaProducerIns(_bootstrap_servers)
+    return ins
