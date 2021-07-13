@@ -1,5 +1,5 @@
 import redis
-from databus.internal.configs import redis_config
+from databus.configs.configs import redis_config
 from databus.internal.utils.singleton.singleton import Singleton
 
 

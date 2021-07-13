@@ -1,4 +1,4 @@
-from databus.internal.dao.redis_client import get_redis_conn
+from databus.internal.model.redis_client import get_redis_conn
 
 __redis_cli = get_redis_conn()
 

@@ -1,4 +1,4 @@
-from databus.internal.dao.kafka_producer import KafkaProducerIns
+from databus.internal.model.kafka_producer import KafkaProducerIns
 
 
 def test_producer():

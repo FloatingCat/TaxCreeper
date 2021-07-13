@@ -1,4 +1,5 @@
-from databus.internal.dao.redis_client import get_redis_conn
+#  Redis相关操作，逻辑层
+from databus.internal.model.redis_client import get_redis_conn
 
 __redis_cli = get_redis_conn()
 

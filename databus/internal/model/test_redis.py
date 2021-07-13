@@ -1,4 +1,4 @@
-from databus.internal.service.mission_recorder.redis_record import add_mission_status
+from databus.internal.dao.record.redis_record import add_mission_status
 from logging import Logger
 
 
