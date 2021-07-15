@@ -6,6 +6,8 @@ from multiprocessing import Process
 from databus.internal.server.http_srv import app
 from databus.internal.job.redo.ddl_checker import checker
 
+# zookeeper-server-start -daemon /usr/local/etc/kafka/zookeeper.properties & kafka-server-start /usr/local/etc/kafka/server.properties
+
 
 def databus_run():
     uvicorn.run(app, host="0.0.0.0", port=10005, reload=False)

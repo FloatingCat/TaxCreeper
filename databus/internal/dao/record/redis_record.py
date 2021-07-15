@@ -48,7 +48,14 @@ def remove_mission_status(topic: str, mission_content, latest_receive: float) ->
 
 
 def set_dead_mission(topic: str, mission_content: str, latest_post: float):
-    return __redis_cli.hset(topic + "_dead", mission_content, latest_post)
+    rm_status = remove_mission_status(topic, mission_content, latest_post)
+    if rm_status["status"] == "not_found":
+        return rm_status
+    else:
+        return {
+            "status": "ok",
+            "content": __redis_cli.hset(topic + "_dead", mission_content, latest_post)
+        }
 
 
 def get_all_dead_mission(topic: str) -> dict:
