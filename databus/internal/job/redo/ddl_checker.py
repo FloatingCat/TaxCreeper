@@ -4,7 +4,7 @@ import time
 from databus.internal.dao.record.redis_record import get_all_mission, set_dead_mission
 from databus.internal.service.poster.mission_create import create_mission
 from databus.internal.utils.log import LOGGER
-__time_range = 30  # 超时600s
+__time_range = 600  # 超时600s
 __mission_topic = ['tax_crawler']
 
 
